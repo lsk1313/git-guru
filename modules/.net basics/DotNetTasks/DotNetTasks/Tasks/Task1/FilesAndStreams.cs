@@ -39,7 +39,7 @@ namespace DotNetTasks.Tasks.Task1
             using var readonlyFileStream = File.OpenRead(this._path);
 
             var buffer = new byte[readonlyFileStream.Length];
-            var numBytesToRead = (int)readonlyFileStream.Length;
+            var numBytesToRead = buffer.Length;
             var numBytesRead = 0;
 
             while (numBytesToRead > 0)
