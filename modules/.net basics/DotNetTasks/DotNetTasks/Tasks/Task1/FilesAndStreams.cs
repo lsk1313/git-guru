@@ -10,28 +10,20 @@ namespace DotNetTasks.Tasks.Task1
 
         public void ReadConsoleInputToMemoryAndWriteToFile()
         {
-            var memoryStream = new MemoryStream();
+            using var memoryStream = new MemoryStream();
 
             for (var i = 0; i < 10; i++)
             {
                 var line = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    var buffer = Encoding.UTF8.GetBytes($"{line}\n");
-                    
-                    memoryStream.Write(buffer, 0, buffer.Length);
-                }
+                var buffer = Encoding.UTF8.GetBytes($"{line}\n");
+
+                memoryStream.Write(buffer, 0, buffer.Length);
             }
 
-            memoryStream.Position = 0;
+            using var fileStream = new FileStream(this._path, FileMode.Create);
 
-            var fileStream = new FileStream(this._path, FileMode.Create);
-
-            memoryStream.CopyTo(fileStream);
+            memoryStream.WriteTo(fileStream);
             fileStream.Flush();
-
-            fileStream.Close();
-            memoryStream.Close();
         }
 
         public string ReadFileOutput()
@@ -39,19 +31,7 @@ namespace DotNetTasks.Tasks.Task1
             using var readonlyFileStream = File.OpenRead(this._path);
 
             var buffer = new byte[readonlyFileStream.Length];
-            var numBytesToRead = buffer.Length;
-            var numBytesRead = 0;
-
-            while (numBytesToRead > 0)
-            {
-                var n = readonlyFileStream.Read(buffer, numBytesRead, numBytesToRead);
-
-                if (n == 0)
-                    break;
-
-                numBytesRead += n;
-                numBytesToRead -= n;
-            }
+            readonlyFileStream.Read(buffer, 0, buffer.Length);
 
             return Encoding.UTF8.GetString(buffer);
         }
