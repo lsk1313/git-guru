@@ -23,7 +23,6 @@ namespace DotNetTasks.Tasks.Task1
             using var fileStream = new FileStream(this._path, FileMode.Create);
 
             memoryStream.WriteTo(fileStream);
-            fileStream.Flush();
         }
 
         public string ReadFileOutput()
