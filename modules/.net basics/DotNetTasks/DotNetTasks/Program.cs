@@ -1,5 +1,4 @@
 ﻿using System;
-using DotNetTasks.Tasks.Task1;
 using DotNetTasks.Tasks.Task2;
 
 namespace DotNetTasks
@@ -10,8 +9,10 @@ namespace DotNetTasks
         {
             var reflection = new Reflection();
             var result = reflection.LoadAssemblyAndReturnIndex();
+            reflection.LoadTypesWhereImplementAssembly();
 
             Console.Write(result);
+            Console.Read();
         }
     }
 }
