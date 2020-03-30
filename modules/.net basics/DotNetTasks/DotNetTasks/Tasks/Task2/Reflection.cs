@@ -1,5 +1,4 @@
-﻿using Education_dotNet_Reflection_interface;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 
@@ -7,21 +6,30 @@ namespace DotNetTasks.Tasks.Task2
 {
     public class Reflection
     {
-        public int LoadAssemblyAndReturnIndex()
+        public string LoadAssemblyAndReturnIndex()
         {
             var assemblyWithClasses = Assembly.LoadFrom("Education_dotNet_Reflection_classes.dll");
+            var assemblyWithInterfaces = Assembly.LoadFrom("Education_dotNet_Reflection_interface.dll");
 
-            var targetType = assemblyWithClasses.GetTypes().FirstOrDefault(t => t.GetInterface("IInterface") != null);
+            var targetInterfaces = assemblyWithInterfaces.GetTypes()
+                .Where(t => t.IsInterface);
+
+            var targetType = assemblyWithClasses.GetTypes().FirstOrDefault(t => targetInterfaces.Any(i => i.IsAssignableFrom(t)));
             if (targetType == null)
             {
-                return 0;
+                return string.Empty;
             }
 
-            var targetInstance = Activator.CreateInstance(targetType) as IInterface;
+            var targetInstance = Activator.CreateInstance(targetType);
+            var propertyInfoTargetType = targetType.GetProperty("CurrentIndex");
 
-            targetInstance.CurrentIndex = int.MaxValue;
+            propertyInfoTargetType?.SetValue(targetInstance, 111);
 
-            return targetInstance.GetNextIndex();
+            var getIndexMethodInfo = targetType.GetMethod("GetNextIndex");
+
+            var result = getIndexMethodInfo?.Invoke(targetInstance, null);
+
+            return result?.ToString();
         }
 
         public void LoadTypesWhereImplementAssembly()
