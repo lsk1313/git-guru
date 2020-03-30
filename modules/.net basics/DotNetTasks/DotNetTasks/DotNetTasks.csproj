@@ -61,6 +61,7 @@
     <Compile Include="Tasks\Task3\Entities\Customer.cs" />
     <Compile Include="Tasks\Task3\Entities\Order.cs" />
     <Compile Include="Tasks\Task3\Serialization.cs" />
+    <Compile Include="Tasks\Task4\MultiThreading.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
