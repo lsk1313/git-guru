@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace DotNetTasks.Tasks.Task3.Entities
 {
@@ -14,10 +12,5 @@ namespace DotNetTasks.Tasks.Task3.Entities
         public string Name { get; set; }
 
         public DateTime DateTimeOrdered { get; set; }
-
-        [JsonIgnore]
-        [XmlIgnore]
-        [field: NonSerialized]
-        public Customer Customer { get; set; }
     }
 }

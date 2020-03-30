@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Xml.Serialization;
 using DotNetTasks.Tasks.Task3.Entities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace DotNetTasks.Tasks.Task3
 {
@@ -11,7 +12,26 @@ namespace DotNetTasks.Tasks.Task3
     {
         public string SerializeJson(object type)
         {
-            var json = JsonConvert.SerializeObject(type);
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented
+            };
+
+            var json = JsonConvert.SerializeObject(type, serializerSettings);
+
+            return json;
+        }
+
+        public string SerializeJsonAndWriteToFile(object type)
+        {
+            var json = this.SerializeJson(type);
+
+            using var fileStream = new FileStream("customer.txt", FileMode.OpenOrCreate);
+
+            var buffer = Encoding.UTF8.GetBytes(json);
+
+            fileStream.Write(buffer, 0, buffer.Length);
 
             return json;
         }
@@ -52,7 +72,7 @@ namespace DotNetTasks.Tasks.Task3
             binaryFormatter.Serialize(fileStream, type);
         }
 
-        public Customer DeserializeBinary(object type)
+        public Customer DeserializeBinary()
         {
             var binaryFormatter = new BinaryFormatter();
 
