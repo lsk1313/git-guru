@@ -7,11 +7,12 @@
 .container {
     margin-top: 15px;
     margin-left: 10px;
-    width: 600px;
-    height: 200px;
+    width: 520px;
+    height: 150px;
     border: 2px solid black;
     display: flex;
     justify-content: center;
+    padding: 2px;
 }
 
 .block {
@@ -20,8 +21,8 @@
 }
 
 .block>p {
-    font-size: 100px;
-    margin-top: 85px;
+    font-size: 75px;
+    padding: 50px 5px 5px 0px;
 }
 
 .black {
@@ -30,4 +31,8 @@
 
 .text-white {
     color: white;
+}
+
+.text-black {
+    text-align: right;
 }
