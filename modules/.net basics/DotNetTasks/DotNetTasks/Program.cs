@@ -1,6 +1,5 @@
 ﻿using DotNetTasks.Tasks.Task4;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DotNetTasks
@@ -10,10 +9,16 @@ namespace DotNetTasks
         private static void Main(string[] args)
         {
             var m = new MultiThreading();
-
-            var watchTask = Task.Factory.StartNew(() => m.WatchFile("file.txt", Console.WriteLine));
+            m.Changed += File_Changed;
+            
+            var watchTask = Task.Factory.StartNew(() => m.WatchFile("file.txt"));
 
             Console.Read();
+        }
+
+        private static void File_Changed(object sender, string e)
+        {
+           Console.WriteLine(e);
         }
     }
 }

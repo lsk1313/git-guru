@@ -1,21 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DotNetTasks.Tasks.Task4
 {
     public class MultiThreading
     {
-        private string _result = string.Empty;
+        public MultiThreading()
+        {
+           CreateFile();
+        }
         
+        private string _result = string.Empty;
+
+        public event EventHandler<string> Changed;
+
         public static void WatchFile()
         {
-            if (!File.Exists("file.txt"))
-            {
-                File.Create("file.txt");
-            }
-
             using var fileSystemWatcher = new FileSystemWatcher
             {
                 NotifyFilter = NotifyFilters.LastWrite,
@@ -36,33 +37,40 @@ namespace DotNetTasks.Tasks.Task4
             Console.WriteLine(streamReader.ReadToEnd());
         }
 
-        public void WatchFile(string path, Action<string> action)
+        public void WatchFile(string path)
         {
             while (true)
             {
-                var watchTask = Task.Factory.StartNew(() => ReadFile(path));
-
-                var result = watchTask.Result;
+                var result = ReadFile(path);
 
                 if (this._result != result)
                 {
-                    action(watchTask.Result);
+                    this.Changed?.Invoke(this, result);
                     this._result = result;
-                    Thread.Sleep(5000);
                 }
-                else
-                {
-                    Thread.Sleep(5000);
-                }
+
+                Thread.Sleep(5000);
             }
         }
 
         private static string ReadFile(string path)
         {
-            using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var streamReader = new StreamReader(fileStream);
 
             return streamReader.ReadToEnd();
+        }
+
+        private static void CreateFile()
+        {
+            if (File.Exists("file.txt"))
+            {
+                return;
+            }
+
+            var fileStream = new FileStream("file.txt", FileMode.OpenOrCreate);
+
+            fileStream.Close();
         }
     }
 }
