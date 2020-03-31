@@ -1,16 +1,34 @@
-﻿using System;
+﻿using DotNetTasks.Abstractions.Interfaces;
+using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DotNetTasks.Tasks.Task4
 {
-    public class MultiThreading
+    public class MultiThreading : ICommand
     {
         public MultiThreading()
         {
-           CreateFile();
+            CreateFile();
+
+            this.Changed += this.File_Changed;
         }
-        
+
+        public void Execute()
+        {
+            Task.Factory.StartNew(() => this.WatchFile("file.txt"));
+        }
+
+        private void File_Changed(object sender, string e)
+        {
+            Console.WriteLine(e);
+        }
+
+        public int Number => 4;
+
+        public string DisplayName => "Task 4: Serialization";
+
         private string _result = string.Empty;
 
         public event EventHandler<string> Changed;
@@ -37,7 +55,7 @@ namespace DotNetTasks.Tasks.Task4
             Console.WriteLine(streamReader.ReadToEnd());
         }
 
-        public void WatchFile(string path)
+        private void WatchFile(string path)
         {
             while (true)
             {
@@ -63,11 +81,6 @@ namespace DotNetTasks.Tasks.Task4
 
         private static void CreateFile()
         {
-            if (File.Exists("file.txt"))
-            {
-                return;
-            }
-
             var fileStream = new FileStream("file.txt", FileMode.OpenOrCreate);
 
             fileStream.Close();

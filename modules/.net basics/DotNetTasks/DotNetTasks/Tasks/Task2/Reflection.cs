@@ -1,12 +1,31 @@
-﻿using System;
+﻿using DotNetTasks.Abstractions.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace DotNetTasks.Tasks.Task2
 {
-    public class Reflection
+    public class Reflection : ICommand
     {
-        public string LoadAssemblyAndReturnIndex()
+        public void Execute()
+        {
+            var index = LoadAssemblyAndReturnIndex();
+            Console.WriteLine($"Next index is: {index}");
+
+            var targetClasses = LoadTypesWhereImplementSpecificAssembly();
+            
+            foreach (var type in targetClasses)
+            {
+                Console.WriteLine($"Class name is: {type.Name}");
+            }
+        }
+
+        public int Number => 2;
+
+        public string DisplayName => "Task 2: Reflection";
+
+        private static string LoadAssemblyAndReturnIndex()
         {
             var assemblyWithClasses = Assembly.LoadFrom("Education_dotNet_Reflection_classes.dll");
             var assemblyWithInterfaces = Assembly.LoadFrom("Education_dotNet_Reflection_interface.dll");
@@ -32,16 +51,16 @@ namespace DotNetTasks.Tasks.Task2
             return result?.ToString();
         }
 
-        public void LoadTypesWhereImplementAssembly()
+        private static IEnumerable<Type> LoadTypesWhereImplementSpecificAssembly()
         {
             var assemblyWithClasses = Assembly.LoadFrom("Education_dotNet_Reflection_classes.dll");
             var assemblyWithInterfaces = Assembly.LoadFrom("Education_dotNet_Reflection_interface.dll");
 
             var targetInterfaces = assemblyWithInterfaces.GetTypes()
                 .Where(t => t.IsInterface);
-            var targetClasses = assemblyWithClasses.GetTypes()
-                .Where(t => t.GetInterfaces().Any(targetInterfaces.Contains));
 
+            return assemblyWithClasses.GetTypes()
+                .Where(t => t.GetInterfaces().Any(targetInterfaces.Contains));
         }
     }
 }

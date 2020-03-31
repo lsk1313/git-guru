@@ -1,14 +1,30 @@
-﻿using System;
+﻿using DotNetTasks.Abstractions.Interfaces;
+using System;
 using System.IO;
 using System.Text;
 
 namespace DotNetTasks.Tasks.Task1
 {
-    public class FilesAndStreams
+    public class FilesAndStreams : ICommand
     {
-        private readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "file.txt");
+        public void Execute()
+        {
+            Console.WriteLine("Enter data via enter 10 times:");
+            this.ReadConsoleInputToMemoryAndWriteToFile();
 
-        public void ReadConsoleInputToMemoryAndWriteToFile()
+            Console.WriteLine("Reading data from file to console..");
+            var result = this.ReadFileOutput();
+
+            Console.Write($"Result: \n{result}");
+        }
+
+        public int Number => 1;
+
+        public string DisplayName => "Task 1: Files and Streams";
+
+        private readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fileTask1.txt");
+
+        private void ReadConsoleInputToMemoryAndWriteToFile()
         {
             using var memoryStream = new MemoryStream();
 
@@ -25,7 +41,7 @@ namespace DotNetTasks.Tasks.Task1
             memoryStream.WriteTo(fileStream);
         }
 
-        public string ReadFileOutput()
+        private string ReadFileOutput()
         {
             using var readonlyFileStream = File.OpenRead(this._path);
 

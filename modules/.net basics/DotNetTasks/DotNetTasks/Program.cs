@@ -1,6 +1,9 @@
-﻿using DotNetTasks.Tasks.Task4;
-using System;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DotNetTasks.Abstractions.Interfaces;
+using DotNetTasks.Tasks.Task1;
+using DotNetTasks.Tasks.Task2;
+using DotNetTasks.Tasks.Task3;
+using DotNetTasks.Tasks.Task4;
 
 namespace DotNetTasks
 {
@@ -8,17 +11,17 @@ namespace DotNetTasks
     {
         private static void Main(string[] args)
         {
-            var m = new MultiThreading();
-            m.Changed += File_Changed;
-            
-            var watchTask = Task.Factory.StartNew(() => m.WatchFile("file.txt"));
+            var commands = new List<ICommand>(4)
+            {
+                new FilesAndStreams(),
+                new Reflection(),
+                new Serialization(),
+                new MultiThreading()
+            };
 
-            Console.Read();
-        }
+            var commandManager = new CommandManager(new CommandProcessor(commands));
 
-        private static void File_Changed(object sender, string e)
-        {
-           Console.WriteLine(e);
+            commandManager.Start();
         }
     }
 }
