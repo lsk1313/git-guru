@@ -1,23 +1,51 @@
 ﻿using System;
-using System.Threading.Tasks;
-using DotNetTasks.Tasks.Task4;
+using System.IO;
 
 namespace DotNetTasks
 {
-    public static class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Main start");
-            var multiThreading = new MultiThreading();
-            
-            Console.WriteLine("FileRead start");
-            var fileReadTask = Task.Factory.StartNew(multiThreading.FileTrigger);
-            
-            Console.WriteLine(fileReadTask.Result);
-            Console.WriteLine("FileRead end");
+            if (!File.Exists("file.txt"))
+            {
+                File.Create("file.txt");
+            }
+
+            using var fileSystemWatcher = new FileSystemWatcher
+            {
+                NotifyFilter = NotifyFilters.LastWrite,
+                Path = AppDomain.CurrentDomain.BaseDirectory,
+                Filter = "file.txt",
+                EnableRaisingEvents = true
+            };
+
+            fileSystemWatcher.Changed += FileSystemWatcher_Changed;
 
             Console.Read();
+        }
+
+        //private static void CreateFileWatcher()
+        //{
+        //    if (!File.Exists("file.txt"))
+        //    {
+        //        File.Create("file.txt");
+        //    }
+
+        //    using var fileSystemWatcher = new FileSystemWatcher
+        //    {
+        //        NotifyFilter = NotifyFilters.LastWrite,
+        //        Path = AppDomain.CurrentDomain.BaseDirectory,
+        //        Filter = "file.txt",
+        //        EnableRaisingEvents = true
+        //    };
+
+        //    fileSystemWatcher.Changed += FileSystemWatcher_Changed;
+        //}
+
+        private static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine(e.ChangeType);
         }
     }
 }
