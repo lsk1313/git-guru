@@ -1,5 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using DotNetTasks.Tasks.Task4;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DotNetTasks
 {
@@ -7,45 +9,11 @@ namespace DotNetTasks
     {
         private static void Main(string[] args)
         {
-            if (!File.Exists("file.txt"))
-            {
-                File.Create("file.txt");
-            }
+            var m = new MultiThreading();
 
-            using var fileSystemWatcher = new FileSystemWatcher
-            {
-                NotifyFilter = NotifyFilters.LastWrite,
-                Path = AppDomain.CurrentDomain.BaseDirectory,
-                Filter = "file.txt",
-                EnableRaisingEvents = true
-            };
-
-            fileSystemWatcher.Changed += FileSystemWatcher_Changed;
+            var watchTask = Task.Factory.StartNew(() => m.WatchFile("file.txt", Console.WriteLine));
 
             Console.Read();
-        }
-
-        //private static void CreateFileWatcher()
-        //{
-        //    if (!File.Exists("file.txt"))
-        //    {
-        //        File.Create("file.txt");
-        //    }
-
-        //    using var fileSystemWatcher = new FileSystemWatcher
-        //    {
-        //        NotifyFilter = NotifyFilters.LastWrite,
-        //        Path = AppDomain.CurrentDomain.BaseDirectory,
-        //        Filter = "file.txt",
-        //        EnableRaisingEvents = true
-        //    };
-
-        //    fileSystemWatcher.Changed += FileSystemWatcher_Changed;
-        //}
-
-        private static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            Console.WriteLine(e.ChangeType);
         }
     }
 }
