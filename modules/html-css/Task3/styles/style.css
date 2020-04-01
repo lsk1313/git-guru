@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 436px;
+    width: 472px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+}
+
+.header {
+    height: 41px;
+    width: 100%;
+    background: url("../img/header.jpg") no-repeat center top;
+}
+
+.current {
+    color: white;
+    font-size: 18px;
+}
+
+nav {
+    height: 100%;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-label {
+    display: inline-block;
+    line-height: 41px;
+    width: 115px;
+}
+
+div>img {
+    vertical-align: bottom;
+    position: relative;
+    top: -10px;
+}
+
+.form {
+    margin: 15px;
+}
+
+.form-header>img {
+    top: 10px;
+    float: right;
+}
+
+.form-image {
+    float: left;
+    width: 102px;
+    height: 169px;
+}
+
+.form-image>img {
+    padding: 5px 0 5px 0;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+input::placeholder {
+    color: lightgrey;
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 5px;
+}
+
+textarea::placeholder {
+    color: lightgrey;
+    font-size: 12px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+.next {
+    float: right;
+    bottom: 0;
+    margin-top: 20px;
+}
+
+.left-side {
+    width: 25%;
+}
+
+.right-side {
+    width: 75%;
+    float: right;
+}
+
+.form-field {
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 100%;
+    height: 25px;
+}
+
+.form-area {
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 100%;
+    height: 100px;
+}
