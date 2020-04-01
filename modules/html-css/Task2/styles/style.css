@@ -1,0 +1,35 @@
+    .pager {
+        list-style: none;
+        width: 100%;
+        border-bottom: 4px solid silver;
+        background-color: #e9e9e9;
+    }
+    
+    .pager-current,
+    .pager-item,
+    .pager-next {
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        margin-bottom: -4px;
+    }
+    
+    .pager-next>a,
+    .pager-item>a {
+        display: block;
+        text-decoration: none;
+        width: 100%;
+        height: 100%;
+        color: #6a1b21;
+    }
+    
+    .pager-current,
+    .pager-next>a:hover,
+    .pager-item>a:hover {
+        color: black;
+        background-color: silver;
+        border-bottom: 4px solid black;
+    }
